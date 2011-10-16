@@ -1,0 +1,443 @@
+<script language="javascript">
+	$(document).ready(function(){
+		/*
+		* ajax Right side of the display data
+		* This function can easily change the location, loading sequence will be different.
+		*/
+		if({MEMBER_ID})
+		{
+			get_my_user_tag(); 
+			get_myfavoritetags();
+		}
+		
+	});
+	function get_my_user_tag(){
+		//My personal label
+		right_show_ajax('{MEMBER_ID}','user_tag','user_tag');
+	}
+	function get_myfavoritetags(){
+		//I am concerned about the topic
+		right_show_ajax('{MEMBER_ID}','myfavoritetags','myfavoritetags');
+	}
+</script>
+
+
+<!--Website after the show on the left three columns of information about me-->
+
+<div class="t_col_main_ln {$t_col_main_lb}">
+<script type="text/javascript">
+	$(document).ready(function(){
+		$(".member_exp").mouseover(function(){$(".member_exp_c").show();});
+		$(".member_exp").mouseout(function(){$(".member_exp_c").hide();});
+		$("#m_avatar2").mouseover(function(){$(".avatar_tips").show();});
+		$("#m_avatar2").mouseout(function(){$(".avatar_tips").hide();});
+	});
+</script>
+<!--User and other information-->
+
+<!--{if $my_member || $member}-->
+<!--{eval $_mymember = $my_member ? $my_member : $member}-->
+
+	<div class="sideBox">
+		<div class="avatar2" id="m_avatar2">
+			<p class="avatar2_i"><a href="index.php?mod={$_mymember[username]}" title="{$_mymember[username]}">
+			<img src="{$_mymember[face]}" alt="{$_mymember[nickname]}" onerror="javascript:faceError(this);" />
+			</a></p>
+			<p class="avatar_tips"><a id="avatar_upload" href="index.php?mod=settings&code=face"><?php echo t('Upload picture'); ?></a></p>
+		
+		</div>
+		
+		<div class="avatar2_info">
+		<a href="index.php?mod={$_mymember[username]}" title="@{$_mymember[nickname]}">{$_mymember[nickname]}</a>{$_mymember[validate_html]}
+		<!--{hook/global_user_extra1}-->
+
+		<div class="member_exp">
+			 <!--{if $this->Config[level_radio]}-->
+				<!--{if $this->Config[topic_level_radio]}-->
+				<span class="wb_l_level">
+				<a class="ico_level wbL{$_mymember[level]}" title="<?php echo t('Click to view blogging level'); ?>"  href="index.php?mod=settings&code=exp">{$_mymember[level]}</a>
+				</span>
+				<!--{/if}-->
+			 <!--{/if}-->
+			{if $_mymember[credits]}<?php echo t('Credits:'); ?> <a title="<?php echo t('Click to view my points'); ?>" href="index.php?mod=settings&code=extcredits"><b>{$_mymember[credits]}</b></a>{/if}
+		
+		
+		</div>
+		
+		<div id="userarea">
+		<!--{if trim($_mymember[from_area])}-->
+		{$_mymember[from_area]}
+		<!--{else}-->
+		<div class="edit_sign"><a href="#" onclick="follower_choose({$_mymember[uid]},'{$_mymember[nickname]}','editarea'); return false;"><?php echo t('Edit the registered address'); ?></a></div>
+		<!--{/if}-->
+		</div>
+		<!--{hook/global_user_extra2}-->
+	</div>
+		<div class="edit_sign">
+		<!--{eval $member_signature = cut_str($_mymember[signature],20);}-->
+		<!--{if $_mymember[uid] == MEMBER_ID }-->
+			<a href="javascript:viod(0);"onclick="follower_choose({$_mymember[uid]},'{$_mymember[nickname]}','topic_signature'); return false;" >
+			<span ectype="user_signature_ajax_left_{$_mymember[uid]}">
+				<span  title="Signature: {$_mymember[signature]}"><!--{if $_mymember[signature]}-->({$member_signature})<!--{else}--><?php echo t('Edit Signature'); ?><!--{/if}--></span>
+			</span>
+			</a>
+			<!--{else}-->
+		<span  title="<?php echo t('Signature:'); ?> {$_mymember[signature]}">
+		<!--{if $_mymember[signature]}-->
+			<!--{if 'admin' == MEMBER_ROLE_TYPE}-->
+				<a href="javascript:void(0);" onclick="follower_choose({$_mymember[uid]},'{$_mymember[nickname]}','topic_signature');" title="<?php echo t('Click to edit your signature'); ?>">
+				<em ectype="user_signature_ajax_{$_mymember[uid]}">({$member_signature})</em>
+				</a>
+			<!--{/if}-->
+		<!--{else}-->{$_mymember[gender_ta]} <?php echo t('Do not fill out personal signature'); ?><!--{/if}-->
+		</span>
+		<!--{/if}-->
+		<!--{hook/global_user_extra3}-->
+		</div>
+	</div>
+	<div class="sideBox">
+		<div class="person_atten_l">
+			<p><span class="num"><a href="index.php?mod={$_mymember[username]}&code=follow" title="{$_mymember[nickname]} <?php echo t('read'); ?>">{$_mymember[follow_count]}</a></span></p>
+			<p><a href="index.php?mod={$_mymember[username]}&code=follow" title="{$_mymember[nickname]} <?php echo t('read'); ?>"><?php echo t('read'); ?></a> </p>
+		</div>
+		<div class="person_atten_l">
+			<p><span class="num"><a href="index.php?mod={$_mymember[username]}&code=fans" title="{$_mymember[nickname]} <?php echo t('fans'); ?>">{$_mymember[fans_count]}</a></span></p>
+			<p><a href="index.php?mod={$_mymember[username]}&code=fans" title="{$_mymember[nickname]} <?php echo t('fans'); ?>"><?php echo t('fans'); ?></a> </p>
+		</div>
+		<div class="person_atten_r">
+			<p><span class="num"><a href="index.php?mod={$_mymember[username]}" title="{$_mymember[nickname]} <?php echo t('posts'); ?>">{$_mymember[topic_count]}</a></span></p>
+			<p><a href="index.php?mod={$_mymember[username]}" title="{$_mymember[nickname]} <?php echo t('posts'); ?>"><?php echo t('posts'); ?></a> </p>
+		</div>
+		<!--{hook/global_user_extra4}-->
+	</div>
+<!--{/if}-->
+<!------User and other information------->
+
+
+<!------Medal of information users------->
+
+<script type="text/javascript">
+$(document).ready(function(){
+	$(".sina_weibo").mouseover(function(){$(".sina_weibo_c").show();});
+	$(".sina_weibo").mouseout(function(){$(".sina_weibo_c").hide();});
+	$(".qqwb").mouseover(function(){$(".qqwb_c").show();});
+	$(".qqwb").mouseout(function(){$(".qqwb_c").hide();});
+	$(".qqim").mouseover(function(){$(".qqim_c").show();});
+	$(".qqim").mouseout(function(){$(".qqim_c").hide();});
+	$(".tel").mouseover(function(){$(".tel_c").show();});
+	$(".tel").mouseout(function(){$(".tel_c").hide();});
+
+	<!--{loop $medal_list $v}-->
+		$(".medal_$v[id]").mouseover(function(){$(".medal_c_$v[id]").show();});
+		$(".medal_$v[id]").mouseout(function(){$(".medal_c_$v[id]").hide();});
+	<!--{/loop}-->
+});
+</script>
+
+<ul class="Vimg">
+
+<!--{if 'tag'!=$this->Get['mod'] || $_mymember[style_three_tol] == 1}-->
+	<!--{if $this->Config[sina_enable] && sina_weibo_init($this->Config)}-->
+	<li class="sina_weibo">{eval echo sina_weibo_bind_icon($_mymember[uid]);} &nbsp; 
+		<div class="sina_weibo_c">
+			<div class="VM_box">
+				<div class="VM_top">
+					<div class="med_img"><img src="./templates/default/images/medal/M_sina.gif"></div>
+					<div class="med_intro">
+						<p>Sina microblogging</p>
+						 Binding, you can use the account to log Sina microblogging, microblogging on this site can be sent simultaneously sent to the Sina microblogging<br />
+						{eval $sina_return  = sina_weibo_has_bind($member[uid]);}
+						<!--{if !$sina_return}-->
+						<a href="index.php?mod=tools&code=sina">Bind Sina microblogging</a> |
+						<!--{/if}-->
+						<a href="index.php?mod=settings&code=user_medal">View My Order</a>
+					</div>
+				</div>
+			</div>
+		</div>		
+	</li>
+	<!--{/if}-->
+
+	<!--{if $this->Config[qqwb_enable] && qqwb_init($this->Config)}-->
+	<li class="qqwb">{eval echo qqwb_bind_icon($_mymember[uid]);} &nbsp; 
+		<div class="qqwb_c">
+			<div class="VM_box">
+				<div class="VM_top">
+					<div class="med_img"><img src="./templates/default/images/medal/qqwb.png"></div>
+					<div class="med_intro">
+						<p>Tencent microblogging</p>
+						 Binding, you can use to log Tencent microblogging account, in the microblogging site can be sent simultaneously sent to Tencent microblogging<br />
+						{eval $qqwb_return  = qqwb_bind_icon($member[uid]);}
+						<!--{if !$qqwb_return}-->
+						<a href="index.php?mod=tools&code=qqwb">Tencent microblogging binding</a> |
+						<!--{/if}-->
+						<a href="index.php?mod=settings&code=user_medal">View My Order</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</li>
+	<!--{/if}-->
+
+	<!--{if $this->Config[imjiqiren_enable] && imjiqiren_init($this->Config)}-->
+	<li class="qqim">{eval echo imjiqiren_bind_icon($_mymember[uid]);} &nbsp; 
+		<div class="qqim_c">
+			<div class="VM_box">
+				<div class="VM_top">
+					<div class="med_img"><img src="./templates/default/images/medal/M_qq.gif"></div>
+					<div class="med_intro">
+					<p>QQ robot</p>
+					QQ with their own micro-Bo, signed by the QQ micro-Bo, if someone @ you, comment on your concern for you, send private messages to you, you can receive the first notification of QQ robot<br />
+					{eval $imjiqiren_return  = imjiqiren_has_bind($member[uid]);}
+					<!--{if !$imjiqiren_return}-->
+					<a href="index.php?mod=tools&code=imjiqiren">Binding QQ robot</a> |
+					<!--{/if}-->
+					<a href="index.php?mod=settings&code=user_medal">View My Order</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</li>
+	<!--{/if}-->
+
+	<!--{if $this->Config[sms_enable] && sms_init($this->Config)}-->
+	<li class="tel">{eval echo sms_bind_icon($_mymember[uid]);} &nbsp; 
+		<div class="tel_c">
+			<div class="VM_box">
+				<div class="VM_top">
+					<div class="med_img"><img src="./templates/default/images/medal/Tel.gif"></div>
+					<div class="med_intro">
+					<p>SMS</p>
+					<?php echo t('Use phones to send to it, and signature sent via cell phone to it, and if someone @ you, comment on your concern for you, send private messages to you, you can first receive SMS notifications'); ?><br />
+					{eval $sms_return  = sms_has_bind($_mymember[uid]);}
+					<!--{if !$sms_return}-->
+					<a href="index.php?mod=tools&code=sms"><?php echo t('Binding SMS'); ?></a> |
+					<!--{/if}-->
+					<a href="index.php?mod=settings&code=user_medal"><?php echo t('View My Medal'); ?></a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</li>
+	<!--{/if}-->
+<!--{/if}-->
+
+	<!--{if $member[validate] || $medal_list}-->
+	<!--{loop $medal_list $val}-->
+	<!--{eval $medal_type = unserialize($val[conditions]);}-->
+	<li class="medal_$val[id]"><a href="index.php?mod=other&code=medal"><img src="{$val[medal_img]}"/></a> &nbsp; 
+		<div class="medal_c medal_c_$val[id]">
+			<div class="VM_box">
+				<div class="VM_top">
+				<div class="med_img"><img src="{$val[medal_img]}"/></div>
+					<div class="med_intro">
+					<p>{$val[medal_name]}</p>
+					{$val[medal_depict]} <br />
+					<!--{if MEMBER_ID != $member[uid]}-->(He: {$val[dateline]} Get) <br />
+					<!--{if $medal_type[type] == 'topic'}-->
+					<a href="index.php?mod=topic&code=myhome"><?php echo t('My Home'); ?></a> |	
+					<!--{elseif $medal_type[type] == 'reply'}-->
+					<a href="index.php?mod=topic&code=new"><?php echo t('I want to send comments'); ?></a> |	
+					<!--{elseif $medal_type[type] == 'tag'}-->
+					<a href="index.php?mod=tag&code=$medal_type[tagname]"><?php echo t('I want to send topic'); ?></a> |	
+					<!--{elseif $medal_type[type] == 'invite'}-->
+					<a href="index.php?mod=profile&code=invite"><?php echo t('Immediately to invite friends'); ?></a> |	
+					<!--{elseif $medal_type[type] == 'shoudong'}-->
+					<?php echo t('Administrator manually grant'); ?>  |	
+					<!--{/if}-->
+					<!--{else}-->
+					(<?php echo t('I am in:'); ?>{$val[dateline]}) <br />
+					<!--{/if}-->
+					<a href="index.php?mod=settings&code=user_medal"><?php echo t('View My Medal'); ?></a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</li>
+	<!--{/loop}-->
+	<!--{/if}-->
+</ul>   
+<!------Medal of information users------->
+
+
+<!--{if MEMBER_ID == $_mymember[uid]}-->
+
+
+	<!--{if $_mymember[face] == './images/no.gif'}-->
+		<div class="sideBox Rlot" style="padding-top:18px;"> <a href="index.php?mod=settings&code=face"><img src="images/setmyablum.gif" /></a> </div>
+	<!--{/if}-->
+
+	
+	<!--{if in_array($this->Code,array('myhome','myfavorite','favoritemy','mycomment','tocomment','myat','myblog')) || $params[code] == 'myblog' || $_mymember[style_three_tol] == 1}-->  
+
+	<div class="blackBox"></div>
+		<ul class="boxRNav2">
+			<!--{if in_array($this->Code,array('myhome','tag','groupview'))}-->  
+			<li class="index current"> 
+			<!--{else}-->
+			<li class="index">
+			<!--{/if}-->
+				<a href="index.php?mod=topic&code=myhome" hidefocus="true" title="<?php echo t('My Home'); ?>"><?php echo t('My Home'); ?></a>
+			</li>
+			
+			<!--{if $params['code'] == 'myblog'}-->  
+			<li class="mypub current"> 
+			<!--{else}-->
+			<li class="mypub">
+			<!--{/if}-->
+				<a href="index.php?mod={$_mymember[username]}" hidefocus="true" title="<?php echo t('My posts'); ?>"><?php echo t('My posts'); ?></a>
+			</li>
+
+		<script type="text/javascript">
+		$(document).ready(function(){
+			var objSt = ".myfav";
+			$(objSt).mouseover(function(){$(objSt + " i").show();});
+			$(objSt).mouseout(function(){$(objSt + " i").hide();});
+		});
+		</script>
+		<!--{if 'myfavorite'== $this->Code}-->	
+		<li class="myfav current"> 
+		<!--{else}-->
+		<li class="myfav">
+		<!--{/if}-->
+			<a href="index.php?mod=topic&code=myfavorite" hidefocus="true" title="<?php echo t('Favorites'); ?>"><?php echo t('Favorites'); ?></a>
+			<i class="anoTh" onclick="window.location.href='index.php?mod=topic&code=favoritemy'" title="<?php echo t('Collection'); ?>"><?php echo t('Collection'); ?></i>
+		</li>
+
+		<script type="text/javascript">
+		$(document).ready(function(){
+			var objSt = ".letter";
+			$(objSt).mouseover(function(){$(objSt + " i").show();});
+			$(objSt).mouseout(function(){$(objSt + " i").hide();});
+		});
+		</script>
+		<!--{if 'mycomment'== $this->Code}-->	
+		<li class="letter current"> 
+		<!--{else}-->
+		<li class="letter">
+		<!--{/if}-->
+			<a href="index.php?mod=topic&code=mycomment" hidefocus="true" title="<?php echo t('My comments'); ?>"><?php echo t('My comments'); ?></a>
+			<i class="anoTf" onclick="window.location.href='index.php?mod=topic&code=tocomment'" title="<?php echo t('Comments to me'); ?>"><?php echo t('Comments to me'); ?></i>
+		</li>
+
+		<!--{if 'myat'== $this->Code}-->
+		<li class="about current"> 
+		<!--{else}-->
+		<li class="about">
+		<!--{/if}-->
+			<a href="index.php?mod=topic&code=myat" hidefocus="true" title="<?php echo t('Mentions'); ?>"><?php echo t('Mentions'); ?></a>
+		</li>
+
+		<script type="text/javascript">
+		$(document).ready(function(){
+		var objSl = ".mailBox";
+			$(objSl).mouseover(function(){$(objSl + " i").show();});
+			$(objSl).mouseout(function(){$(objSl + " i").hide();});
+		});
+		</script>
+		<li class="mailBox">
+			<a href="index.php?mod=vote&view=me&filter=created&uid={$uid}" hidefocus="true" title="<?php echo t('My vote'); ?>"><?php echo t('My vote'); ?></a>
+			<i class="anoTv" onclick="window.location.href='index.php?mod=vote&view=me&filter=joined&uid={$uid}'" title="<?php echo t('Other voting'); ?>"><?php echo t('Other voting'); ?></i>
+		</li>
+
+		<script type="text/javascript">
+		    $(document).ready(function(){
+		    var objSA = ".actBox";
+			$(objSA).mouseover(function(){$(objSA + " i").show();});
+			$(objSA).mouseout(function(){$(objSA + " i").hide();});
+			});
+		</script>
+		<!-- {eval $event_setting=ConfigHandler::get('event_setting')} -->
+		<!-- {if $event_setting == 1} -->
+        <li class="actBox">
+        <a href="index.php?mod=event&code=myevent" hidefocus="true" title="<?php echo t('My events'); ?>"><?php echo t('My events'); ?></a>
+		<i class="anoTv" onclick="window.location.href='index.php?mod=event&code=myevent&type=part&uid={$uid}'" title="<?php echo t('Other events'); ?>"><?php echo t('Other events'); ?></i>
+		</li>
+		<!-- {/if} -->
+		{eval $navigation_config=ConfigHandler::get('navigation')}
+		<!--{if !empty($navigation_config[pluginmenu])}-->
+		 <!--{loop $navigation_config[pluginmenu]  $pmenus}-->
+		 <!--{loop $pmenus $pmenu}-->
+		  <!--{if $pmenu[type] == 3}-->
+		  <!--{if 'topic'==$this->require}-->
+		  <li class="mypub current">
+		  <!--{else}-->
+		  <li class="mypub">
+		  <!--{/if}-->
+		  <a href="{$pmenu[url]}&require=topic" hidefocus="true" title="{$pmenu[name]}">{$pmenu[name]}</a></li>
+		   <!--{/if}-->	
+		 <!--{/loop}-->
+		 <!--{/loop}-->
+		 <!--{/if}-->
+      </ul>
+      <div class="blackBox2"></div>
+	<!--{/if}-->
+
+<!--{/if}-->
+
+	
+<!-------------------------Information about me-------------------------------->
+
+<!--{if MEMBER_ID == $_mymember[uid] }-->
+	
+		<!--{if in_array($this->Code,array('myhome','myfavorite','favoritemy','mycomment','tocomment','myat'))   || $_mymember[style_three_tol] == 1}-->  
+
+		<script type="text/javascript">
+		$(document).ready(function(){
+			$(".SC_guanyu").click(function(){$(this).parent().toggleClass("fold_guanyu");$(".SC_guanyu_box").toggle();});
+		});
+		</script>
+		<div class="SC">
+			<h3>{$_mymember[nickname]} <?php echo t('about it'); ?><a class="btn SC_guanyu" href="javascript:void(0)"></a></h3>
+			<ul class="FTL SC_guanyu_box">
+				<!--{if $_mymember[aboutme]}-->
+				<li>&nbsp;{$_mymember[aboutme]}</li>
+				<!--{elseif MEMBER_ID==$_mymember[uid] && !$_GET[mod_original]}-->
+				<li><a href="index.php?mod=settings"><?php echo t('Come write a word'); ?></a></li>
+				<!--{else}-->
+				<?php echo t('This guy is lazy, nothing left.'); ?>
+				<!--{/if}-->
+			</ul>
+		</div>
+		
+		<!--My label-->
+			<!--{if MEMBER_ID > 0}-->
+			<script type="text/javascript">
+				$(document).ready(function(){
+					$(".SC_biaoqian").click(function(){$(this).parent().toggleClass("fold_biaoqian");$(".SC_biaoqian_box").toggle();});
+				});
+			</script>
+			<div class="SC">
+			<h3><?php echo t('My label'); ?>
+				<a class="btn SC_biaoqian" href="javascript:void(0);" onclick="right_show_ajax('{MEMBER_ID}','user_tag','user_tag'); return false;"></a>
+			</h3>
+			<ul class="FTL SC_biaoqian_box">
+				<div id="{MEMBER_ID}_user_tag"></div>
+			</ul>
+			</div>
+			<!--{/if}-->  
+		<!--My label-->
+		
+		<!--{if !$tag}-->
+			<!--I am concerned about the topic-->
+			<!--{if MEMBER_ID > 0}-->
+			<script type="text/javascript">
+				$(document).ready(function(){
+					$(".SC_woguanzhu").click(function(){$(this).parent().toggleClass("fold_woguanzhu");$(".SC_woguanzhu_box").toggle();});
+				});
+			</script>
+			<div class="SC">
+			<h3><?php echo t('I am concerned about the topic'); ?> <a class="btn SC_woguanzhu" href="javascript:void(0);" onclick="right_show_ajax('{MEMBER_ID}','myfavoritetags','myfavoritetags')"></a></h3>
+			<ul class="FTL SC_woguanzhu_box">
+				<div id="{MEMBER_ID}_myfavoritetags"></div>
+			</ul>
+			</div>
+			<!--{/if}-->
+			<!--I am concerned about the topic-->
+		<!--{/if}-->
+		
+	<!--{/if}-->
+<!--{/if}-->
+<!-------------------------Information about me-------------------------------->
+
+</div>
